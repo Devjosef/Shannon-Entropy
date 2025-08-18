@@ -19,3 +19,30 @@ double  shannon_entropy(std::vector<int> actions) {
 }
 
 
+// Entropy for controlled probability distributions (probabilities may be unnormalized)
+double shannon_entropy_from_probabilities(const std::vector<double>& probabilities) {
+    double sum = 0.0;
+    for (double p : probabilities) {
+        if (p < 0.0) {
+            continue;
+        }
+        sum += p;
+    }
+    if (sum <= 0.0) {
+        return 0.0;
+    }
+
+    double entropy = 0.0;
+    for (double p : probabilities) {
+        if (p <= 0.0) {
+            continue;
+        }
+        double normalized = p / sum;
+        if (normalized > 0.0) {
+            entropy -= normalized * std::log2(normalized);
+        }
+    }
+    return entropy;
+}
+
+
