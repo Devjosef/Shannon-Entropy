@@ -1,0 +1,4 @@
+Time_Window,Trader_Actions,Shannon_Entropy,Market_Volatility,Interpretation
+1,"[0,0,1,2,2,0,1]",1.251,2.5,"Mixed, Moderate Volatility"
+2,"[0,0,0,0,0,0,0]",0.000,0.2,"Predictable, Stable Market"
+3,"[0,1,2,0,1,2,0]",1.585,3.0,"Unpredictable, High Volatility"
