@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Shannon Entropy Market Analysis Setup Script
 
 echo "Setting up Shannon Entropy Market Analysis environment..."

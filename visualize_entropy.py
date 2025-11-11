@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
 """
 Shannon Entropy Market Analysis Visualizer
-Reads CSV data from C++ output and creates charts showing entropy-volatility correlation
+Reads CSV data from C++ output and creates charts showing the entropy volatility correlation
 """
 
 import pandas as pd # type: ignore

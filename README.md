@@ -63,64 +63,68 @@ double shannon_entropy(std::vector<int> actions) {
 
 **Robustness Tests**: 15/15 edge cases handled gracefully
  
-**Market Validation**: 60 windows across 4 market scenarios
+**Market Validation**: 60 windows across 5 market scenarios
 
 **Visual Inspection**: Comprehensive correlation analysis
 
 ### Key Test Scenarios
-**Bull Market**: High entropy (1.267 bits) + Moderate volatility (2.770)
+**Bull Market**: High entropy (1.497 bits) + Moderate volatility (2.945)
 
-**Bear Market**: Mixed entropy (1.113 bits) + High volatility (4.336)
+**Bear Market**: Mixed entropy (0.944 bits) + High volatility (3.216)
 
-**Market Crash**: Low entropy (0.879 bits) + Very high volatility (6.555)
+**Market Crash**: Low entropy (0.599 bits) + Very high volatility (4.999)
 
-**Recovery**: Mixed entropy (1.147 bits) + High volatility (4.626)
+**Sideways Market**: Mixed entropy (0.925 bits) + Moderate volatility (2.788)
+
+**Recovery**: Mixed entropy (0.868 bits) + High volatility (3.902)
 
 ##  Validating the Thesis
 
-### Primary Finding: In the Complex Entropy-Volatility Relationship
-**Correlation Coefficient: -0.193 (Weak negative)**
+### Primary Finding: The Entropy-Volatility Relationship
 
-This reveals a **counterintuitive but insightful pattern**:
+**Correlation Coefficient: -0.601 (Moderate negative)**
 
-### Market Behavior Patterns Discovered:
+This reveals an **unexpected pattern** that differs from the initial hypothesis:
+
+### Market Behavior Patterns Observed:
 
 1. **Market Crashes** → **Low Entropy + High Volatility**
    - Mass panic creates predictable behavior (low entropy)
    - But results in extreme volatility spikes
-   - **Pattern**: Predictable panic → Unpredictable market
+   - **Pattern**: Predictable panic → High volatility
 
 2. **Normal Trading** → **High Entropy + Moderate Volatility**
    - Diverse trader actions (high entropy)
-   - Results in stable, moderate volatility
-   - **Pattern**: Unpredictable behavior → Predictable market
+   - Results in moderate volatility
+   - **Pattern**: High entropy behavior → Moderate volatility
 
 3. **Market Stress** → **Mixed Patterns**
    - Varying entropy levels
    - Consistently high volatility
-   - **Pattern**: Mixed behavior → High uncertainty
+   - **Pattern**: Mixed behavior → High volatility
 
 ## Conclusions
 
-### Thesis Partially Supported
-The relationship between entropy and volatility is **more sophisticated than initially hypothesized**:
+### Thesis Status: Not Supported by Data
 
-- **Entropy successfully differentiates market conditions**
-- **Captures behavioral patterns traditional measures miss**
-- **Provides early warning for market stress**
-- **Reveals counterintuitive panic behavior patterns**
+The relationship between entropy and volatility differs from the initial hypothesis:
 
-### Key Insights:
-1. **Low entropy during crashes** indicates mass panic behavior
-2. **High entropy during normal periods** indicates healthy market diversity
-3. **Entropy measure is more nuanced** than simple volatility correlation
-4. **Behavioral complexity** provides unique market intelligence
+- **Negative correlation (-0.601)** indicates entropy and volatility move in opposite directions
+- **Entropy does differentiate market conditions** but not in the predicted direction
+- **Traditional volatility measures may capture dynamics** that entropy-based analysis alone cannot fully explain
+- **Behavioral complexity alone is insufficient** for volatility prediction without additional factors
 
-### Practical Applications:
-- **Risk Management**: Low entropy + high volatility = potential crash signal
-- **Market Timing**: Entropy changes precede volatility spikes
-- **Behavioral Analysis**: Quantifies market sentiment complexity
-- **Trading Strategy**: Entropy-based volatility prediction
+### Key Observations:
+1. **Low entropy during crashes** does occur with high volatility
+2. **High entropy during normal periods** occurs with moderate volatility
+3. **The correlation is negative and stable** across larger sample sizes
+4. **Behavioral patterns exist** but predictive power requires further investigation
+
+### Research Insights:
+- **Entropy Analysis**: Successfully quantifies trader action distribution
+- **Pattern Recognition**: Captures behavioral differences across market conditions
+- **Volatility Prediction**: Requires additional models beyond entropy correlation
+- **Risk Management**: Entropy provides supporting context but not standalone signals
 
 ## Usage
 
@@ -166,4 +170,4 @@ Shannon/
 
 ---
 
-**Conclusion**: Shannon entropy provides a powerful lens for understanding market behavior complexity, revealing patterns that traditional volatility measures can sometimes miss. While the relationship is more nuanced than simple correlation as previously thought, entropy analysis offers more unique insights for market prediction and risk management. Has yet to been tested on real data.
+**Conclusion**: Shannon entropy provides a mathematical lens for understanding market behavior complexity and successfully quantifies trader action distributions. While the initial hypothesis of positive entropy-volatility correlation was not supported by testing, the analysis reveals that behavioral patterns do differ across market conditions. Entropy analysis offers supporting context for market understanding, though additional models are needed for practical volatility prediction. Has yet to be tested on real market data.
