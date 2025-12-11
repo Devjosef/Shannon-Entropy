@@ -8,7 +8,6 @@
 #include <algorithm>
 #include "../data-collection.cpp"
 
-// Synthetic market data generator
 class SyntheticMarketData {
 private:
     std::mt19937 rng;
@@ -16,15 +15,13 @@ private:
 public:
     SyntheticMarketData(int seed = 42) : rng(seed) {}
     
-    // Generate trading actions based on market conditions
     std::vector<int> generate_trading_actions(int period_length, double volatility_level) {
         std::vector<int> actions;
         actions.reserve(period_length);
         
-        // Higher volatility = more diverse actions
-        double buy_prob = 0.3 + (volatility_level * 0.2);  // 0.3 to 0.7
-        double sell_prob = 0.3 + (volatility_level * 0.2); // 0.3 to 0.7
-        double hold_prob = 1.0 - buy_prob - sell_prob;     // Remaining
+        double buy_prob = 0.3 + (volatility_level * 0.2);
+        double sell_prob = 0.3 + (volatility_level * 0.2);
+        double hold_prob = 1.0 - buy_prob - sell_prob;
         
         std::discrete_distribution<int> dist({hold_prob, buy_prob, sell_prob});
         
@@ -34,14 +31,11 @@ public:
         return actions;
     }
     
-    // Generate realistic volatility based on market conditions
     double generate_volatility(double base_vol, double entropy_level, double market_stress = 0.0) {
-        // Base volatility + entropy contribution + market stress
         return base_vol + (entropy_level * 1.5) + (market_stress * 2.0);
     }
 };
 
-// Market scenario simulation
 struct MarketScenario {
     std::string name;
     std::string description;
@@ -54,40 +48,18 @@ struct MarketScenario {
 int main() {
     std::cout << "=== Market Data Validation: Entropy vs Volatility Correlation ===\n\n";
     
-    SyntheticMarketData market_gen(42); // Fixed seed for reproducibility
+    SyntheticMarketData market_gen(42);
     
-    // Define realistic market scenarios
     std::vector<MarketScenario> scenarios = {
-        {
-            "Bull Market",
-            "Steady upward trend with low volatility",
-            0.5, 0.1, 20, 5
-        },
-        {
-            "Bear Market",
-            "Declining trend with moderate volatility",
-            1.2, 0.3, 20, 5
-        },
-        {
-            "Market Crash",
-            "Sharp decline with extreme volatility",
-            2.5, 0.8, 20, 5
-        },
-        {
-            "Sideways Market",
-            "No clear trend, mixed sentiment",
-            1.0, 0.2, 20, 5
-        },
-        {
-            "Recovery Period",
-            "Bouncing back from crash",
-            1.8, 0.4, 20, 5
-        }
+        {"Bull Market", "Steady upward trend with low volatility", 0.5, 0.1, 20, 5},
+        {"Bear Market", "Declining trend with moderate volatility", 1.2, 0.3, 20, 5},
+        {"Market Crash", "Sharp decline with extreme volatility", 2.5, 0.8, 20, 5},
+        {"Sideways Market", "No clear trend, mixed sentiment", 1.0, 0.2, 20, 5},
+        {"Recovery Period", "Bouncing back from crash", 1.8, 0.4, 20, 5}
     };
     
     std::cout << std::fixed << std::setprecision(3);
     
-    // Track correlation data
     std::vector<double> all_entropies;
     std::vector<double> all_volatilities;
     
@@ -100,23 +72,16 @@ int main() {
         double scenario_volatility_sum = 0.0;
         
         for (int period = 0; period < scenario.num_periods; ++period) {
-            // Generate trading actions for this period
             auto actions = market_gen.generate_trading_actions(scenario.period_length, scenario.base_volatility);
-            
-            // Calculate entropy
             double entropy = shannon_entropy(actions);
-            
-            // Generate corresponding volatility
             double volatility = market_gen.generate_volatility(scenario.base_volatility, entropy, scenario.market_stress);
             
-            // Store for correlation analysis
             all_entropies.push_back(entropy);
             all_volatilities.push_back(volatility);
             
             scenario_entropy_sum += entropy;
             scenario_volatility_sum += volatility;
             
-            // Display period results
             std::cout << "Period " << (period + 1) << ":\n";
             std::cout << "  Actions: [";
             for (size_t i = 0; i < std::min(size_t(10), actions.size()); ++i) {
@@ -128,7 +93,6 @@ int main() {
             std::cout << "  Entropy: " << entropy << " bits\n";
             std::cout << "  Volatility: " << volatility << "\n";
             
-            // Interpretation
             std::string interpretation;
             if (entropy < 0.5) {
                 interpretation = "Predictable behavior";
@@ -140,7 +104,6 @@ int main() {
             std::cout << "  Interpretation: " << interpretation << "\n\n";
         }
         
-        // Scenario summary
         double avg_entropy = scenario_entropy_sum / scenario.num_periods;
         double avg_volatility = scenario_volatility_sum / scenario.num_periods;
         
@@ -151,11 +114,9 @@ int main() {
                                          avg_entropy > 0.5 && avg_volatility > 1.0 ? "Moderate" : "Weak") << "\n\n";
     }
     
-    // Overall correlation analysis
     std::cout << "=== Overall Correlation Analysis ===\n";
     std::cout << "Total data points: " << all_entropies.size() << "\n";
     
-    // Calculate correlation coefficient
     double mean_entropy = 0.0, mean_volatility = 0.0;
     for (size_t i = 0; i < all_entropies.size(); ++i) {
         mean_entropy += all_entropies[i];
@@ -187,7 +148,6 @@ int main() {
         std::cout << "Negative correlation\n";
     }
     
-    // Validate our thesis
     std::cout << "\n=== Thesis Validation ===\n";
     if (correlation > 0.3) {
         std::cout << "✓ THESIS SUPPORTED: Rising entropy correlates with volatility spikes\n";
