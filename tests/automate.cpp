@@ -6,7 +6,6 @@
 #include <cmath>
 #include "../data-collection.cpp"
 
-// Behavioral patterns mapped to volatility spikes
 struct BehavioralCase {
     std::string name;
     std::vector<int> actions;
@@ -16,45 +15,14 @@ struct BehavioralCase {
 };
 
 int main() {
-    std::cout << "=== Automated Behavioral Data Test: Entropy -> Volatility Spikes ===\n\n";
+    std::cout << "=== Behavioral Data Test: Entropy -> Volatility ===\n\n";
 
-    // Define behavioral cases with known entropy-volatility relationships
     std::vector<BehavioralCase> cases = {
-        {
-            "Panic Selling",
-            {2, 2, 2, 2, 2, 2, 2, 2, 2, 2}, // All sell
-            0.0, // Predictable
-            5.0, // High volatility spike
-            "Mass panic selling creates predictable behavior but high volatility"
-        },
-        {
-            "FOMO Buying",
-            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // All buy
-            0.0, // Predictable
-            4.5, // High volatility spike
-            "Fear of missing out creates predictable buying but high volatility"
-        },
-        {
-            "Mixed Sentiment",
-            {0, 1, 2, 0, 1, 2, 0, 1, 2, 0}, // Alternating
-            1.585, // High entropy (uniform distribution)
-            3.2, // Moderate-high volatility
-            "Mixed sentiment creates unpredictable behavior and moderate volatility"
-        },
-        {
-            "Hesitant Trading",
-            {0, 0, 0, 1, 0, 0, 2, 0, 0, 0}, // Mostly hold with occasional trades
-            0.881, // Low-medium entropy
-            1.8, // Low volatility
-            "Hesitant trading creates low entropy and low volatility"
-        },
-        {
-            "Chaotic Trading",
-            {1, 2, 0, 2, 1, 0, 1, 2, 1, 2}, // Random pattern
-            1.585, // High entropy
-            4.8, // Very high volatility
-            "Chaotic trading creates high entropy and very high volatility"
-        }
+        {"Panic Selling",  {2,2,2,2,2,2,2,2,2,2}, 0.0, 5.0, "Mass panic: predictable but volatile"},
+        {"FOMO Buying",    {1,1,1,1,1,1,1,1,1,1}, 0.0, 4.5, "FOMO rush: predictable but volatile"},
+        {"Mixed Sentiment",{0,1,2,0,1,2,0,1,2,0}, 1.585, 3.2, "Diverse actions: moderate volatility"},
+        {"Hesitant Trading",{0,0,0,1,0,0,2,0,0,0}, 0.881, 1.8, "Mostly hold: low volatility"},
+        {"Chaotic Trading", {1,2,0,2,1,0,1,2,1,2}, 1.585, 4.8, "Random actions: high volatility"}
     };
 
     std::cout << std::fixed << std::setprecision(3);
@@ -76,9 +44,7 @@ int main() {
         std::cout << "  Volatility spike: " << test_case.volatility_spike << "\n";
         std::cout << "  Description: " << test_case.description << "\n";
 
-        // Verify entropy calculation
-        const double EPS = 0.01;
-        if (std::fabs(calculated_entropy - test_case.expected_entropy) < EPS) {
+        if (std::fabs(calculated_entropy - test_case.expected_entropy) < 0.01) {
             std::cout << "  ✓ Entropy calculation PASSED\n";
             passed_tests++;
         } else {
@@ -87,20 +53,19 @@ int main() {
         std::cout << "\n";
     }
 
-    // Test behavioral patterns -> volatility relationship
     std::cout << "=== Behavioral Pattern Analysis ===\n";
     std::cout << "Pattern: Low Entropy + High Volatility (Panic/FOMO)\n";
-    assert(cases[0].expected_entropy < 0.5 && cases[0].volatility_spike > 4.0); // Panic selling
-    assert(cases[1].expected_entropy < 0.5 && cases[1].volatility_spike > 4.0); // FOMO buying
-    std::cout << "✓ Panic/FOMO patterns verified: Low entropy but high volatility\n\n";
+    assert(cases[0].expected_entropy < 0.5 && cases[0].volatility_spike > 4.0);
+    assert(cases[1].expected_entropy < 0.5 && cases[1].volatility_spike > 4.0);
+    std::cout << "✓ Panic/FOMO patterns verified\n\n";
 
     std::cout << "Pattern: High Entropy + High Volatility (Chaos)\n";
-    assert(cases[4].expected_entropy > 1.5 && cases[4].volatility_spike > 4.0); // Chaotic trading
-    std::cout << "✓ Chaos pattern verified: High entropy and high volatility\n\n";
+    assert(cases[4].expected_entropy > 1.5 && cases[4].volatility_spike > 4.0);
+    std::cout << "✓ Chaos pattern verified\n\n";
 
     std::cout << "Pattern: Low Entropy + Low Volatility (Stable)\n";
-    assert(cases[3].expected_entropy < 1.0 && cases[3].volatility_spike < 2.0); // Hesitant trading
-    std::cout << "✓ Stable pattern verified: Low entropy and low volatility\n\n";
+    assert(cases[3].expected_entropy < 1.0 && cases[3].volatility_spike < 2.0);
+    std::cout << "✓ Stable pattern verified\n\n";
 
     std::cout << "Test Results: " << passed_tests << "/" << total_tests << " entropy calculations passed\n";
     std::cout << "✓ All behavioral pattern assertions passed\n";
