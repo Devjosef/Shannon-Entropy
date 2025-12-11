@@ -1,5 +1,9 @@
 # Shannon Entropy Market Analysis
 
+**Live Demo** (60 windows, r=-0.193):
+[![Kaggle Dataset](https://img.shields.io/badge/Kaggle-Dataset-blueviolet)](https://www.kaggle.com/datasets/josefmath/shannon-entropy-market-simulation-60-windows)
+[![Kaggle Notebook](https://img.shields.io/badge/Kaggle-Notebook-orange)](https://www.kaggle.com/code/josefmath/notebook-for-shannon-dataset)
+
 ## Purpose & Goal
 
 **Purpose**: Apply Shannon entropy from information theory to analyze trader behavior patterns and their correlation with market volatility.
