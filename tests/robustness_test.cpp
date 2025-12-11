@@ -8,113 +8,38 @@
 #include <algorithm>
 #include "../data-collection.cpp"
 
-// Robustness test cases
 struct RobustnessCase {
     std::string name;
     std::vector<int> actions;
     double expected_entropy;
     std::string expected_behavior;
-    bool should_throw;
 };
 
 int main() {
     std::cout << "=== Entropy Function Robustness Test ===\n\n";
     
-    std::mt19937 rng(42); // Fixed seed for reproducibility
+    std::mt19937 rng(42);
     
-    // Define robustness test cases
     std::vector<RobustnessCase> cases = {
-        {
-            "All Identical Actions (Entropy=0)",
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            0.0,
-            "Completely predictable behavior",
-            false
-        },
-        {
-            "All Buy Actions",
-            {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-            0.0,
-            "Mass buying behavior",
-            false
-        },
-        {
-            "All Sell Actions",
-            {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
-            0.0,
-            "Mass selling behavior",
-            false
-        },
-        {
-            "Completely Random Actions (High Entropy)",
-            {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1},
-            1.585,
-            "Maximum unpredictability (uniform distribution)",
-            false
-        },
-        {
-            "Empty Dataset",
-            {},
-            0.0,
-            "No actions to analyze",
-            false
-        },
-        {
-            "Single Action",
-            {1},
-            0.0,
-            "Single action is completely predictable",
-            false
-        },
-        {
-            "Two Identical Actions",
-            {0, 0},
-            0.0,
-            "Two identical actions are predictable",
-            false
-        },
-        {
-            "Two Different Actions",
-            {0, 1},
-            1.0,
-            "Two different actions with equal probability",
-            false
-        },
-        {
-            "Three Different Actions (Uniform)",
-            {0, 1, 2},
-            1.585,
-            "Three actions with equal probability",
-            false
-        },
-        {
-            "Skewed Distribution",
-            {0, 0, 0, 0, 0, 1, 1, 2},
-            1.299,
-            "Skewed towards hold with some buy/sell",
-            false
-        },
-        {
-            "Large Dataset - All Identical",
-            std::vector<int>(100, 1),
-            0.0,
-            "Large dataset with identical actions",
-            false
-        },
-        {
-            "Large Dataset - Random",
-            [&rng]() {
-                std::vector<int> actions(100);
-                std::uniform_int_distribution<int> dist(0, 2);
-                for (int& action : actions) {
-                    action = dist(rng);
-                }
-                return actions;
-            }(),
-            1.585,
-            "Large random dataset (should approach theoretical max)",
-            false
-        }
+        {"All Identical Actions (Entropy=0)", {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 0.0, "Completely predictable behavior"},
+        {"All Buy Actions", {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, 0.0, "Mass buying behavior"},
+        {"All Sell Actions", {2, 2, 2, 2, 2, 2, 2, 2, 2, 2}, 0.0, "Mass selling behavior"},
+        {"Completely Random Actions (High Entropy)", {0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1}, 1.585, "Maximum unpredictability (uniform distribution)"},
+        {"Empty Dataset", {}, 0.0, "No actions to analyze"},
+        {"Single Action", {1}, 0.0, "Single action is completely predictable"},
+        {"Two Identical Actions", {0, 0}, 0.0, "Two identical actions are predictable"},
+        {"Two Different Actions", {0, 1}, 1.0, "Two different actions with equal probability"},
+        {"Three Different Actions (Uniform)", {0, 1, 2}, 1.585, "Three actions with equal probability"},
+        {"Skewed Distribution", {0, 0, 0, 0, 0, 1, 1, 2}, 1.299, "Skewed towards hold with some buy/sell"},
+        {"Large Dataset - All Identical", std::vector<int>(100, 1), 0.0, "Large dataset with identical actions"},
+        {"Large Dataset - Random", [&rng]() {
+            std::vector<int> actions(100);
+            std::uniform_int_distribution<int> dist(0, 2);
+            for (int& action : actions) {
+                action = dist(rng);
+            }
+            return actions;
+        }(), 1.585, "Large random dataset (should approach theoretical max)"}
     };
     
     std::cout << std::fixed << std::setprecision(6);
@@ -124,13 +49,11 @@ int main() {
     for (const auto& test_case : cases) {
         std::cout << "Test: " << test_case.name << "\n";
         
-        // Handle empty dataset specially
         if (test_case.actions.empty()) {
             std::cout << "  Actions: [EMPTY]\n";
             std::cout << "  Expected entropy: " << test_case.expected_entropy << " bits\n";
             std::cout << "  Expected behavior: " << test_case.expected_behavior << "\n";
             
-            // Test that empty dataset doesn't crash
             try {
                 double entropy = shannon_entropy(test_case.actions);
                 std::cout << "  Calculated entropy: " << entropy << " bits\n";
@@ -145,7 +68,6 @@ int main() {
                 std::cout << "  ✗ FAILED: Empty dataset caused exception: " << e.what() << "\n";
             }
         } else {
-            // Display actions (truncated for large datasets)
             std::cout << "  Actions: [";
             size_t display_limit = std::min(size_t(20), test_case.actions.size());
             for (size_t i = 0; i < display_limit; ++i) {
@@ -164,7 +86,6 @@ int main() {
                 double entropy = shannon_entropy(test_case.actions);
                 std::cout << "  Calculated entropy: " << entropy << " bits\n";
                 
-                // Verify entropy calculation
                 const double EPS = 0.01;
                 if (std::fabs(entropy - test_case.expected_entropy) < EPS) {
                     std::cout << "  ✓ PASSED: Entropy calculation correct\n";
@@ -174,7 +95,6 @@ int main() {
                     std::cout << "    Difference: " << std::fabs(entropy - test_case.expected_entropy) << "\n";
                 }
                 
-                // Additional validation for specific cases
                 if (test_case.name.find("Identical") != std::string::npos) {
                     if (entropy == 0.0) {
                         std::cout << "  ✓ PASSED: Identical actions correctly yield zero entropy\n";
@@ -195,14 +115,11 @@ int main() {
                 std::cout << "  ✗ FAILED: Exception occurred: " << e.what() << "\n";
             }
         }
-        
         std::cout << "\n";
     }
     
-    // Boundary condition tests
     std::cout << "=== Boundary Condition Tests ===\n";
     
-    // Test with very large numbers
     std::vector<int> large_numbers = {1000, 1000, 2000, 2000, 3000, 3000};
     try {
         double entropy = shannon_entropy(large_numbers);
@@ -212,7 +129,6 @@ int main() {
         std::cout << "Large numbers test failed: " << e.what() << " ✗\n";
     }
     
-    // Test with negative numbers
     std::vector<int> negative_numbers = {-1, -1, -2, -2, -3, -3};
     try {
         double entropy = shannon_entropy(negative_numbers);
@@ -222,7 +138,6 @@ int main() {
         std::cout << "Negative numbers test failed: " << e.what() << " ✗\n";
     }
     
-    // Test with mixed positive/negative
     std::vector<int> mixed_numbers = {0, -1, 1, -2, 2, -3, 3};
     try {
         double entropy = shannon_entropy(mixed_numbers);
