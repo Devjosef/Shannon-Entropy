@@ -2,43 +2,40 @@
 
 ## Purpose & Goal
 
-Purpose: This project is to apply the Shannon Entropy from information theory to analyze trader behaviour patterns and their correlation with market volatility.
+**Purpose**: Apply Shannon entropy from information theory to analyze trader behavior patterns and their correlation with market volatility.
 
-Goal: Develop a mathematical framework for prediciting market volatility through behavioral complexity analysis.
+**Goal**: Develop a mathematical framework for predicting market volatility through behavioral complexity analysis.
 
 # Theory & Approach
 
 ### Shannon Entropy in market analysis
-Shannon entropy quantifies the unpredictability of traders actions
+Shannon entropy quantifies how unpredictable trader actions are.
 
-**Low Entropy (0-0.5 bits)**:Predictable behaviour (mass buying / selling)
-
-**Medium Entropy (0.5-1.2 bits)**: Mixed behavior patterns
-
+**Low Entropy (0–0.5 bits)**: Predictable behavior (mass buying or selling)  
+**Medium Entropy (0.5–1.2 bits)**: Mixed behavior patterns  
 **High Entropy (1.2+ bits)**: Unpredictable, chaotic behavior
 
 ### Core Hypothesis
-**thesis** Trader behavior entropy correlates with market volatility, thus providing early warning signals for market stress.
+**Thesis**: Trader behavior entropy correlates with market volatility and may provide early warning signals of market stress.
 
 ## Methodology
 
 ### Data Collection
-**Trader Actions**: 0 (hold), 1 (buy), 2 (sell)
-
-**Time Window**: Sequential trading periods
-
-**Entropy Calculations**: `H = -Σ(p_i * log2(p_i))`
+**Trader Actions**: 0 (hold), 1 (buy), 2 (sell)  
+**Time Window**: Sequential trading periods  
+**Entropy Calculation**: `H = -Σ(p_i * log2(p_i))`
 
 ### Testing Framework
-**Unit Tests** Validate entropy calculations with known distrubutions.
+**Unit Tests** Validate entropy calculations against known distrubutions.
 
-**Robustness Tests** Edge cases such as (empty data, identical actions, random patterns (identical actions and random patterns im refering to algorhtim trading) ).
+**Robustness Tests** Edge cases such as empty data, all identical actions, and random or algorithmic trading patterns.
 
 **Market Simulation**: Realistic scenarios (Bull/Bear markets, crashes, recovery)
 
 **Visual Validation**: Comphrensive plotting and correlation analysis
 
 ### Implementation
+# NOTE: Measures how "surprised" by trader decisions. All buys = 0 bits (predictable). Equal mix = max bits (chaotic)
 ```cpp
 double shannon_entropy(std::vector<int> actions) {
     std::map<int, int> counts;
@@ -88,20 +85,20 @@ This reveals an **unexpected pattern** that differs from the initial hypothesis:
 
 ### Market Behavior Patterns Observed:
 
-1. **Market Crashes** → **Low Entropy + High Volatility**
+1. **Market Crashes** -> **Low Entropy + High Volatility**
    - Mass panic creates predictable behavior (low entropy)
    - But results in extreme volatility spikes
    - **Pattern**: Predictable panic → High volatility
 
-2. **Normal Trading** → **High Entropy + Moderate Volatility**
+2. **Normal Trading** -> **High Entropy + Moderate Volatility**
    - Diverse trader actions (high entropy)
    - Results in moderate volatility
    - **Pattern**: High entropy behavior → Moderate volatility
 
-3. **Market Stress** → **Mixed Patterns**
+3. **Market Stress** -> **Mixed Patterns**
    - Varying entropy levels
    - Consistently high volatility
-   - **Pattern**: Mixed behavior → High volatility
+   - **Pattern**: Mixed behavior -> High volatility
 
 ## Conclusions
 
@@ -133,14 +130,14 @@ The relationship between entropy and volatility differs from the initial hypothe
 # Setup environment
 ./setup.sh
 
-# Run tests
-g++ -std=c++17 -o test_suite tests/robustness_test.cpp
-./test_suite
+g++ -std=c++17 -o entropy entropy.cpp && ./entropy
 
-# Generate visual analysis
-g++ -std=c++17 -o visual_test tests/visual_inspection_test.cpp
-./visual_test
+g++ -std=c++17 -o test_suite tests/robustness_test.cpp && ./test_suite
+
+g++ -std=c++17 -o visual_test tests/visual_inspection_test.cpp && ./visual_test
+
 python visualize_entropy.py
+
 ```
 ### Files Structure
 ```
@@ -159,7 +156,7 @@ Shannon/
 - **Language**: C++17 with Python visualization
 - **Entropy Range**: 0.0 to 1.585 bits (theoretical max for 3 actions)
 - **Test Coverage**: 100% edge cases, 60 market scenarios
-- **Correlation Analysis**: Pearson coefficient calculation
+- **Correlation Analysis**: Pearson coefficient
 - **Visualization**: 4-panel comprehensive charts
 
 
@@ -170,4 +167,4 @@ Shannon/
 
 ---
 
-**Conclusion**: Shannon entropy provides a mathematical lens for understanding market behavior complexity and successfully quantifies trader action distributions. While the initial hypothesis of positive entropy-volatility correlation was not supported by testing, the analysis reveals that behavioral patterns do differ across market conditions. Entropy analysis offers supporting context for market understanding, though additional models are needed for practical volatility prediction. Has yet to be tested on real market data.
+Final Insight: Entropy quantifies behavior patterns effectively. Negative correlation challenges the hypothesis but reveals crash predictability (low entropy -> high vol). Needs real market data for practical use.
