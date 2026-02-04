@@ -75,7 +75,7 @@ int main() {
     
     // Recovery (10 windows)
     for (int i = 51; i <= 60; ++i) {
-        auto actions = generator.generate_actions(15, 0.4);
+        auto actions = generator.generate_actions(15, 0.8);
         double entropy = shannon_entropy(actions);
         double volatility = generator.generate_volatility(2.5, entropy, 0.3);
         windows.push_back({i, actions, entropy, volatility, "Recovery", 
