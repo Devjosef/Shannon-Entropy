@@ -1,6 +1,21 @@
 #!/bin/bash
+# Load .env
+if [ -f .env ]; then
+    set -a
+    source .env
+    set +a
+else
+    echo "Error: .env file missing"
+    exit 1
+fi
+
+TOKEN="$FINNHUB_API_KEY"
+if [ -z "$TOKEN" ]; then
+    echo "Error: FINNHUB_API_KEY not set in .env"
+    exit 1
+fi
+
 cd "$(dirname "$0")"
-TOKEN="d4ik4apr01qkv40ivm6gd4ik4apr01qkv40ivm70"
 SYMBOLS=("SPY" "QQQ" "AAPL" "TSLA")
 MAX_LOOPS=50
 
