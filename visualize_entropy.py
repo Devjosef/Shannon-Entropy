@@ -6,6 +6,15 @@ import os
 import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
+def compute_rolling_entropy(prices, window=50, bins=4):
+    def entropy_window(x):
+        if len(x) < 2:
+            return 0
+        levels = pd.cut(x, bins=bins, labels=False)
+        probs = pd.Series(levels).value_counts(normalize=True)
+        return -sum(p * np.log2(p + 1e-10) for p in probs.values)
+    return prices.rolling(window=window, min_periods=10).apply(entropy_window,raw=False)
+
 def validate_and_visualize_stock_data(csv_file="spy_live_data_final.csv"):
     expected_file = "spy_live_data_final.csv"
     
@@ -19,7 +28,7 @@ def validate_and_visualize_stock_data(csv_file="spy_live_data_final.csv"):
     
     try:
         df = pd.read_csv(csv_file, on_bad_lines='skip')
-        print("✓ SPY data loaded successfully:")
+        print("Data loaded successfully:")
         print(df.head())
         print(f"Shape: {df.shape}")
         
@@ -33,15 +42,14 @@ def validate_and_visualize_stock_data(csv_file="spy_live_data_final.csv"):
         df['Window_ID'] = range(len(df))
         df['Volatility'] = df['Price'].rolling(window=10).std().fillna(0)
         
-        df['Price_Level'] = pd.cut(df['Price'], bins=4, labels=['L1','L2','L3','L4'])
-        price_dist = df['Price_Level'].value_counts(normalize=True)
-        entropy_val = -sum(p * np.log2(p + 1e-10) for p in price_dist.values)
-        df['Entropy'] = entropy_val
+        df['Entropy'] = compute_rolling_entropy(df['Price'], window=100)
+        df['Entropy'] = df['Entropy'].bfill().fillna(0)
+
         
         df['Market_Condition'] = np.where(df['Volatility'] > df['Volatility'].median(), 
                                         'High Volatility', 'Stable')
         
-        print("\n✓ Processed data preview:")
+        print("\n Processed data preview:")
         print(df[['timestamp', 'symbol', 'Price', 'Volatility', 'Entropy', 'Market_Condition']][::50].head(10))
         print(f"Volatility range: {df['Volatility'].min():.3f} to {df['Volatility'].max():.3f}")
         
@@ -51,7 +59,7 @@ def validate_and_visualize_stock_data(csv_file="spy_live_data_final.csv"):
         sns.scatterplot(data=df, x='Entropy', y='Volatility', ax=ax1, 
                        s=60, alpha=0.65, edgecolors='black', linewidth=0.8)
         corr = df['Entropy'].corr(df['Volatility'])
-        ax1.set_title(f'SPY Correlation: ρ={corr:.3f}', fontsize=14, fontweight='bold')
+        ax1.set_title(f'Correlation: ρ={corr:.3f}', fontsize=14, fontweight='bold')
         ax1.grid(True, alpha=0.3)
 
         ax2.plot(df['Window_ID'], df['Entropy'], 'b-', linewidth=2, alpha=0.8)
@@ -60,7 +68,7 @@ def validate_and_visualize_stock_data(csv_file="spy_live_data_final.csv"):
         ax2.grid(True, alpha=0.3)
 
         ax3.plot(df['Window_ID'], df['Volatility'], 'r-', linewidth=2, alpha=0.8)
-        ax3.set_title('SPY Volatility Over Time', fontsize=14, fontweight='bold')
+        ax3.set_title('Volatility Over Time', fontsize=14, fontweight='bold')
         ax3.set_xlabel('Window ID')
         ax3.grid(True, alpha=0.3)
 
